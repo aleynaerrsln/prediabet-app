@@ -92,14 +92,12 @@ prediabet-app/
 └── package.json
 ```
 
-## Demo Video
+## Hizli Erisim (QR Kodlari)
 
-https://www.youtube.com/shorts/-0aHvhyzOIk
-
-## APK Indirme
-
-GitHub Releases sayfasindan APK dosyasini indirebilirsiniz:
-https://github.com/aleynaerrsln/prediabet-app/releases
+| Demo Video | APK Indirme | GitHub Repo |
+|:---:|:---:|:---:|
+| ![Video QR](https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://www.youtube.com/shorts/-0aHvhyzOIk) | ![APK QR](https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://github.com/aleynaerrsln/prediabet-app/releases) | ![Repo QR](https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://github.com/aleynaerrsln/prediabet-app) |
+| [YouTube](https://www.youtube.com/shorts/-0aHvhyzOIk) | [Releases](https://github.com/aleynaerrsln/prediabet-app/releases) | [Repo](https://github.com/aleynaerrsln/prediabet-app) |
 
 ## Gelistirici
 
