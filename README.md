@@ -2,6 +2,17 @@
 
 Prediyabet riski tasiyan bireyler icin gelistirilmis kapsamli saglik takip mobil uygulamasi.
 
+## Proje Notu
+
+### Hedef Kullanici Kitlesi
+Prediyabet tanisi almis veya diyabet riski tasiyan bireyler, saglikliyasam surdurmek isteyen herkes.
+
+### Cozulmek Istenen Problem
+Prediyabet hastalarinin gunluk saglik takibini kolaylastirmak, beslenme ve egzersiz aliskanliklarin duzenlenmesine yardimci olmak, yapay zeka destekli kisisel saglik danismanligi sunmak.
+
+### Panodan Alinan Ilham
+Pinterest panosundaki PREDIABET-TR uygulama tasarimlari temel alinarak ekran yapilari, renk paleti (kirmizi tonlari) ve menu duzeni olusturuldu. Pano uzerindeki profil, BKI hesaplama, anket ve bilgilendirme ekranlari referans alinarak modern ve kullanici dostu bir arayuz tasarlandi. Bunlarin uzerine AI asistan, adimsayar ve beslenme gunlugu gibi yaratici ozellikler eklendi.
+
 ## Kurulum ve Calistirma
 
 ```bash
@@ -83,4 +94,4 @@ prediabet-app/
 
 ## Gelistirici
 
-Aleyna Arslan - Firat Universitesi
+Aleyna Erarslan - Samsun Universitesi
