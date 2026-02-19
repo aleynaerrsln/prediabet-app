@@ -14,10 +14,10 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.aleyna5519.prediabetapp"
+      "bundleIdentifier": "com.aerarslan1919.prediabetapp"
     },
     "android": {
-      "package": "com.aleyna5519.prediabetapp",
+      "package": "com.aerarslan1919.prediabetapp",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -27,17 +27,14 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "extra": {
-      "eas": {
-        "projectId": "d4cae09a-a310-48e0-b105-2bb09c326c84"
-      }
-    },
-    "owner": "aleyna5519",
+    "owner": "aerarslan1919",
     "runtimeVersion": {
       "policy": "appVersion"
     },
-    "updates": {
-      "url": "https://u.expo.dev/d4cae09a-a310-48e0-b105-2bb09c326c84"
+    "extra": {
+      "eas": {
+        "projectId": "29da4ac6-270c-4c44-9362-1b32bff93ea9"
+      }
     }
   }
 }
