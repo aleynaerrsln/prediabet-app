@@ -92,6 +92,15 @@ prediabet-app/
 └── package.json
 ```
 
+## Demo Video
+
+https://www.youtube.com/shorts/-0aHvhyzOIk
+
+## APK Indirme
+
+GitHub Releases sayfasindan APK dosyasini indirebilirsiniz:
+https://github.com/aleynaerrsln/prediabet-app/releases
+
 ## Gelistirici
 
 Aleyna Erarslan - Samsun Universitesi
