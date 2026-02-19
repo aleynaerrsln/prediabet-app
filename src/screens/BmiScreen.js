@@ -14,6 +14,7 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../constants/theme';
+import GradientHeader from '../components/GradientHeader';
 
 const getBmiCategory = (bmi) => {
   const val = parseFloat(bmi);
@@ -106,16 +107,7 @@ export default function BmiScreen({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.headerBtn}>
-          <Ionicons name="chevron-back" size={24} color={COLORS.white} />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>BKİ Hesaplama</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('Home')} style={styles.headerBtn}>
-          <Ionicons name="log-out-outline" size={24} color={COLORS.white} />
-        </TouchableOpacity>
-      </View>
+      <GradientHeader title="BKİ Hesaplama" navigation={navigation} />
 
       <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.inputContainer}>
@@ -223,23 +215,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  header: {
-    backgroundColor: COLORS.primary,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 15,
-    paddingVertical: 15,
-    paddingTop: 40,
-  },
-  headerBtn: {
-    padding: 5,
-  },
-  headerTitle: {
-    color: COLORS.white,
-    fontSize: 18,
-    fontWeight: 'bold',
   },
   content: {
     padding: 20,

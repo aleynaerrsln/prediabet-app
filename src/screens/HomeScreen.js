@@ -8,32 +8,36 @@ import {
   SafeAreaView,
   StatusBar,
   Animated,
+  Dimensions,
 } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../constants/theme';
 
+const { width } = Dimensions.get('window');
+
 const menuItems = [
-  { title: 'Profil', icon: 'person-outline', screen: 'Profile' },
-  { title: 'Bilgilendirme', icon: 'information-circle-outline', screen: 'Info' },
-  { title: 'BKİ Hesaplama', icon: 'calculator-outline', screen: 'Bmi' },
-  { title: 'Ön Testler', icon: 'clipboard-outline', screen: 'Survey' },
-  { title: 'Son Testler', icon: 'document-text-outline', screen: 'Survey' },
-  { title: 'İletişim', icon: 'call-outline', screen: 'Contact' },
-  { title: 'Hakkımızda', icon: 'people-outline', screen: 'About' },
-  { title: 'S.S.S.', icon: 'help-circle-outline', screen: 'Faq' },
-  { title: 'Besin Ekle', icon: 'nutrition-outline', screen: 'Food' },
-  { title: 'Adımsayar', icon: 'footsteps-outline', screen: 'StepCounter' },
+  { title: 'Profil', icon: 'person', screen: 'Profile', colors: ['#C41E3A', '#FF6B6B'] },
+  { title: 'Bilgilendirme', icon: 'information-circle', screen: 'Info', colors: ['#1E88E5', '#64B5F6'] },
+  { title: 'BKİ Hesaplama', icon: 'calculator', screen: 'Bmi', colors: ['#43A047', '#81C784'] },
+  { title: 'Ön Testler', icon: 'clipboard', screen: 'Survey', colors: ['#FB8C00', '#FFB74D'] },
+  { title: 'Son Testler', icon: 'document-text', screen: 'Survey', colors: ['#8E24AA', '#CE93D8'] },
+  { title: 'İletişim', icon: 'call', screen: 'Contact', colors: ['#00897B', '#80CBC4'] },
+  { title: 'Hakkımızda', icon: 'people', screen: 'About', colors: ['#5C6BC0', '#9FA8DA'] },
+  { title: 'S.S.S.', icon: 'help-circle', screen: 'Faq', colors: ['#E53935', '#EF9A9A'] },
+  { title: 'Besin Ekle', icon: 'nutrition', screen: 'Food', colors: ['#7CB342', '#C5E1A5'] },
+  { title: 'Adımsayar', icon: 'footsteps', screen: 'StepCounter', colors: ['#F4511E', '#FFAB91'] },
 ];
 
 const healthTips = [
   { tip: 'Günde en az 8 bardak su içmeyi unutmayın! Su, metabolizmanızı hızlandırır.', icon: 'water-outline' },
   { tip: 'Her gün 30 dakika yürüyüş yapın, diyabet riskinizi %58 azaltın!', icon: 'walk-outline' },
-  { tip: 'Tam tahıllı ürünler kan şekerinizi dengede tutar. Beyaz ekmek yerine tam buğday tercih edin.', icon: 'leaf-outline' },
-  { tip: 'Düzenli uyku insülin direncini azaltmaya yardımcı olur. Her gece 7-8 saat uyuyun.', icon: 'moon-outline' },
-  { tip: 'Stresi azaltın! Meditasyon ve derin nefes egzersizleri kan şekerinizi dengeler.', icon: 'happy-outline' },
-  { tip: 'Porsiyonlarınızı küçültün, daha sık ve az yiyin. Küçük tabak kullanın!', icon: 'restaurant-outline' },
-  { tip: 'Lifli gıdalar tüketin: sebzeler, baklagiller, yulaf... Lif kan şekerini yavaşça yükseltir.', icon: 'nutrition-outline' },
+  { tip: 'Tam tahıllı ürünler kan şekerinizi dengede tutar.', icon: 'leaf-outline' },
+  { tip: 'Düzenli uyku insülin direncini azaltır. Her gece 7-8 saat uyuyun.', icon: 'moon-outline' },
+  { tip: 'Stresi azaltın! Meditasyon ve derin nefes egzersizleri deneyin.', icon: 'happy-outline' },
+  { tip: 'Porsiyonlarınızı küçültün, daha sık ve az yiyin.', icon: 'restaurant-outline' },
+  { tip: 'Lifli gıdalar tüketin: sebzeler, baklagiller, yulaf...', icon: 'nutrition-outline' },
 ];
 
 const motivationalQuotes = [
@@ -58,101 +62,96 @@ export default function HomeScreen({ navigation }) {
   }, []);
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      loadUserName();
-    });
-    return unsubscribe;
+    const unsub = navigation.addListener('focus', () => loadUserName());
+    return unsub;
   }, [navigation]);
 
   const loadUserName = async () => {
     try {
       const data = await AsyncStorage.getItem('profile');
       if (data) {
-        const parsed = JSON.parse(data);
-        if (parsed.name) setUserName(parsed.name);
+        const p = JSON.parse(data);
+        if (p.name) setUserName(p.name);
       }
     } catch (e) {}
   };
 
   const pickDaily = () => {
-    const dayIndex = new Date().getDate();
-    setDailyTip(healthTips[dayIndex % healthTips.length]);
-    setQuote(motivationalQuotes[dayIndex % motivationalQuotes.length]);
+    const d = new Date().getDate();
+    setDailyTip(healthTips[d % healthTips.length]);
+    setQuote(motivationalQuotes[d % motivationalQuotes.length]);
   };
 
   const startAnimations = () => {
-    Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 600,
-      useNativeDriver: true,
-    }).start();
-
-    scaleAnims.forEach((anim, index) => {
-      Animated.spring(anim, {
-        toValue: 1,
-        delay: index * 60,
-        friction: 6,
-        tension: 80,
-        useNativeDriver: true,
-      }).start();
+    Animated.timing(fadeAnim, { toValue: 1, duration: 600, useNativeDriver: true }).start();
+    scaleAnims.forEach((anim, i) => {
+      Animated.spring(anim, { toValue: 1, delay: i * 50, friction: 6, tension: 80, useNativeDriver: true }).start();
     });
   };
 
   const getGreeting = () => {
-    const hour = new Date().getHours();
-    if (hour < 12) return 'Günaydın';
-    if (hour < 18) return 'İyi Günler';
+    const h = new Date().getHours();
+    if (h < 12) return 'Günaydın';
+    if (h < 18) return 'İyi Günler';
     return 'İyi Akşamlar';
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar backgroundColor={COLORS.primary} barStyle="light-content" />
+      <StatusBar backgroundColor={COLORS.primaryDark} barStyle="light-content" />
 
-      {/* Header */}
-      <View style={styles.header}>
-        <View style={styles.logoContainer}>
-          <Ionicons name="medical-outline" size={40} color={COLORS.primary} />
-          <Text style={styles.logoText}>PREDIABET</Text>
+      {/* Gradient Header */}
+      <LinearGradient colors={COLORS.gradientDark} style={styles.header}>
+        <View style={styles.headerDecor} />
+        <View style={styles.logoRow}>
+          <View style={styles.logoCircle}>
+            <Ionicons name="medical" size={28} color={COLORS.primary} />
+          </View>
+          <View style={styles.logoTextWrap}>
+            <Text style={styles.logoText}>PREDIABET</Text>
+            {userName ? (
+              <Text style={styles.greeting}>{getGreeting()}, {userName}!</Text>
+            ) : (
+              <Text style={styles.greeting}>Sağlıklı Yaşam Rehberiniz</Text>
+            )}
+          </View>
         </View>
-        {userName ? (
-          <Animated.Text style={[styles.greeting, { opacity: fadeAnim }]}>
-            {getGreeting()}, {userName}!
-          </Animated.Text>
-        ) : null}
-      </View>
+      </LinearGradient>
 
-      <ScrollView contentContainerStyle={styles.scrollContent}>
-        {/* Motivational Quote */}
+      <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+        {/* Quote */}
         <Animated.View style={[styles.quoteCard, { opacity: fadeAnim }]}>
-          <Ionicons name="heart-outline" size={18} color={COLORS.primary} />
+          <View style={styles.quoteIcon}>
+            <Ionicons name="heart" size={16} color={COLORS.primary} />
+          </View>
           <Text style={styles.quoteText}>{quote}</Text>
         </Animated.View>
 
-        {/* Daily Tip Card */}
-        <Animated.View style={[styles.tipCard, { opacity: fadeAnim }]}>
-          <View style={styles.tipHeader}>
-            <Ionicons name={dailyTip.icon} size={24} color={COLORS.primary} />
-            <Text style={styles.tipLabel}>Günün Sağlık İpucu</Text>
-          </View>
-          <Text style={styles.tipText}>{dailyTip.tip}</Text>
+        {/* Tip Card */}
+        <Animated.View style={{ opacity: fadeAnim }}>
+          <LinearGradient colors={['#FFF5F5', '#FFFFFF']} style={styles.tipCard}>
+            <View style={styles.tipBadge}>
+              <Ionicons name={dailyTip.icon} size={20} color={COLORS.white} />
+            </View>
+            <View style={styles.tipContent}>
+              <Text style={styles.tipLabel}>GÜNÜN İPUCU</Text>
+              <Text style={styles.tipText}>{dailyTip.tip}</Text>
+            </View>
+          </LinearGradient>
         </Animated.View>
 
         {/* Menu Grid */}
         <View style={styles.menuGrid}>
           {menuItems.map((item, index) => (
-            <Animated.View
-              key={index}
-              style={{ width: '47%', transform: [{ scale: scaleAnims[index] }] }}
-            >
+            <Animated.View key={index} style={{ width: '47%', transform: [{ scale: scaleAnims[index] }] }}>
               <TouchableOpacity
                 style={styles.menuItem}
                 onPress={() => navigation.navigate(item.screen)}
-                activeOpacity={0.7}
+                activeOpacity={0.75}
               >
-                <View style={styles.iconCircle}>
-                  <Ionicons name={item.icon} size={26} color={COLORS.primary} />
-                </View>
+                <LinearGradient colors={item.colors} style={styles.menuIconWrap}>
+                  <Ionicons name={item.icon} size={24} color={COLORS.white} />
+                </LinearGradient>
                 <Text style={styles.menuText}>{item.title}</Text>
               </TouchableOpacity>
             </Animated.View>
@@ -164,119 +163,105 @@ export default function HomeScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: COLORS.background,
-  },
+  container: { flex: 1, backgroundColor: COLORS.background },
   header: {
+    paddingTop: 45,
+    paddingBottom: 22,
+    paddingHorizontal: 20,
+    borderBottomLeftRadius: 28,
+    borderBottomRightRadius: 28,
+    overflow: 'hidden',
+  },
+  headerDecor: {
+    position: 'absolute',
+    width: 200,
+    height: 200,
+    borderRadius: 100,
+    backgroundColor: 'rgba(255,255,255,0.05)',
+    top: -60,
+    right: -40,
+  },
+  logoRow: { flexDirection: 'row', alignItems: 'center' },
+  logoCircle: {
+    width: 52,
+    height: 52,
+    borderRadius: 26,
     backgroundColor: COLORS.white,
-    paddingVertical: 20,
+    justifyContent: 'center',
     alignItems: 'center',
-    borderBottomWidth: 1,
-    borderBottomColor: COLORS.border,
+    elevation: 4,
   },
-  logoContainer: {
-    alignItems: 'center',
-  },
-  logoText: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    color: COLORS.primary,
-    marginTop: 5,
-    letterSpacing: 2,
-  },
-  greeting: {
-    marginTop: 8,
-    fontSize: 15,
-    color: COLORS.textLight,
-    fontWeight: '500',
-  },
-  scrollContent: {
-    padding: 15,
-    paddingBottom: 30,
-  },
+  logoTextWrap: { marginLeft: 14 },
+  logoText: { fontSize: 22, fontWeight: 'bold', color: COLORS.white, letterSpacing: 2 },
+  greeting: { fontSize: 13, color: 'rgba(255,255,255,0.8)', marginTop: 2 },
+  scrollContent: { padding: 16, paddingBottom: 30 },
   quoteCard: {
-    backgroundColor: COLORS.white,
-    borderRadius: 12,
-    padding: 14,
-    marginBottom: 12,
     flexDirection: 'row',
     alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#FFDADA',
-    elevation: 1,
-  },
-  quoteText: {
-    fontSize: 13,
-    fontStyle: 'italic',
-    color: COLORS.textLight,
-    marginLeft: 10,
-    flex: 1,
-  },
-  tipCard: {
-    backgroundColor: '#FFF5F5',
+    backgroundColor: COLORS.white,
     borderRadius: 14,
-    padding: 16,
-    marginBottom: 18,
-    borderLeftWidth: 4,
-    borderLeftColor: COLORS.primary,
+    padding: 14,
+    marginBottom: 14,
     elevation: 2,
     shadowColor: COLORS.shadow,
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
   },
-  tipHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 8,
-  },
-  tipLabel: {
-    fontSize: 13,
-    fontWeight: 'bold',
-    color: COLORS.primary,
-    marginLeft: 8,
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
-  },
-  tipText: {
-    fontSize: 14,
-    lineHeight: 21,
-    color: COLORS.text,
-  },
-  menuGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-  },
-  menuItem: {
-    backgroundColor: COLORS.white,
-    borderRadius: 14,
-    padding: 18,
-    marginBottom: 15,
-    alignItems: 'center',
+  quoteIcon: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: '#FFF0F0',
     justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  quoteText: { flex: 1, fontSize: 13, fontStyle: 'italic', color: COLORS.textLight, lineHeight: 19 },
+  tipCard: {
+    borderRadius: 16,
+    padding: 16,
+    marginBottom: 18,
+    flexDirection: 'row',
+    alignItems: 'center',
     elevation: 3,
     shadowColor: COLORS.shadow,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
-    shadowRadius: 4,
-    borderWidth: 1,
-    borderColor: COLORS.border,
+    shadowRadius: 6,
   },
-  iconCircle: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    backgroundColor: '#FFF0F0',
+  tipBadge: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: COLORS.primary,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 8,
+    marginRight: 14,
   },
-  menuText: {
-    fontSize: 13,
-    fontWeight: '600',
-    color: COLORS.text,
-    textAlign: 'center',
+  tipContent: { flex: 1 },
+  tipLabel: { fontSize: 11, fontWeight: 'bold', color: COLORS.primary, letterSpacing: 1, marginBottom: 4 },
+  tipText: { fontSize: 13, lineHeight: 20, color: COLORS.text },
+  menuGrid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' },
+  menuItem: {
+    backgroundColor: COLORS.white,
+    borderRadius: 18,
+    padding: 18,
+    marginBottom: 14,
+    alignItems: 'center',
+    elevation: 4,
+    shadowColor: COLORS.shadow,
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
   },
+  menuIconWrap: {
+    width: 52,
+    height: 52,
+    borderRadius: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  menuText: { fontSize: 13, fontWeight: '600', color: COLORS.text, textAlign: 'center' },
 });

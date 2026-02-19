@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../constants/theme';
+import GradientHeader from '../components/GradientHeader';
 
 const faqData = [
   {
@@ -47,16 +48,7 @@ export default function FaqScreen({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.headerBtn}>
-          <Ionicons name="chevron-back" size={24} color={COLORS.white} />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>S.S.S.</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('Home')} style={styles.headerBtn}>
-          <Ionicons name="log-out-outline" size={24} color={COLORS.white} />
-        </TouchableOpacity>
-      </View>
+      <GradientHeader title="S.S.S." navigation={navigation} />
 
       <ScrollView contentContainerStyle={styles.content}>
         {faqData.map((faq, index) => (
@@ -81,23 +73,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.background,
-  },
-  header: {
-    backgroundColor: COLORS.primary,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 15,
-    paddingVertical: 15,
-    paddingTop: 40,
-  },
-  headerBtn: {
-    padding: 5,
-  },
-  headerTitle: {
-    color: COLORS.white,
-    fontSize: 18,
-    fontWeight: 'bold',
   },
   content: {
     padding: 20,

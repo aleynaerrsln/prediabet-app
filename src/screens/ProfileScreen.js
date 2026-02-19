@@ -9,10 +9,14 @@ import {
   Alert,
   ScrollView,
   ActivityIndicator,
+  Dimensions,
 } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../constants/theme';
+
+const { width } = Dimensions.get('window');
 
 export default function ProfileScreen({ navigation }) {
   const [name, setName] = useState('');
@@ -21,120 +25,106 @@ export default function ProfileScreen({ navigation }) {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
-  useEffect(() => {
-    loadProfile();
-  }, []);
+  useEffect(() => { loadProfile(); }, []);
 
   const loadProfile = async () => {
     try {
       const data = await AsyncStorage.getItem('profile');
       if (data) {
-        const parsed = JSON.parse(data);
-        setName(parsed.name || '');
-        setPhone(parsed.phone || '');
-        setPassword(parsed.password || '');
+        const p = JSON.parse(data);
+        setName(p.name || '');
+        setPhone(p.phone || '');
+        setPassword(p.password || '');
       }
-    } catch (e) {
-      console.log('Profil yüklenemedi');
-    } finally {
-      setLoading(false);
-    }
+    } catch (e) {} finally { setLoading(false); }
   };
 
   const saveProfile = async () => {
-    if (!name.trim()) {
-      Alert.alert('Uyarı', 'Lütfen adınızı giriniz.');
-      return;
-    }
+    if (!name.trim()) { Alert.alert('Uyarı', 'Lütfen adınızı giriniz.'); return; }
     setSaving(true);
     try {
-      await AsyncStorage.setItem(
-        'profile',
-        JSON.stringify({ name, phone, password })
-      );
+      await AsyncStorage.setItem('profile', JSON.stringify({ name, phone, password }));
       Alert.alert('Başarılı', 'Profil güncellendi!');
-    } catch (e) {
-      Alert.alert('Hata', 'Profil kaydedilemedi.');
-    } finally {
-      setSaving(false);
-    }
+    } catch (e) { Alert.alert('Hata', 'Profil kaydedilemedi.'); }
+    finally { setSaving(false); }
   };
 
-  if (loading) {
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color={COLORS.primary} />
-      </View>
-    );
-  }
+  if (loading) return <View style={styles.loadingContainer}><ActivityIndicator size="large" color={COLORS.primary} /></View>;
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.headerBtn}>
-          <Ionicons name="chevron-back" size={24} color={COLORS.white} />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Profil</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('Home')} style={styles.headerBtn}>
-          <Ionicons name="log-out-outline" size={24} color={COLORS.white} />
-        </TouchableOpacity>
-      </View>
+      {/* Gradient Header with curved bottom */}
+      <LinearGradient colors={COLORS.gradientDark} style={styles.headerGradient}>
+        <View style={styles.headerRow}>
+          <TouchableOpacity onPress={() => navigation.goBack()} style={styles.headerBtn}>
+            <Ionicons name="chevron-back" size={24} color={COLORS.white} />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>Profil</Text>
+          <TouchableOpacity onPress={() => navigation.navigate('Home')} style={styles.headerBtn}>
+            <Ionicons name="log-out-outline" size={24} color={COLORS.white} />
+          </TouchableOpacity>
+        </View>
+
+        {/* Avatar */}
+        <View style={styles.avatarWrap}>
+          <View style={styles.avatarOuter}>
+            <View style={styles.avatarInner}>
+              <Ionicons name="person" size={40} color={COLORS.primary} />
+            </View>
+          </View>
+          <Text style={styles.avatarName}>{name || 'Kullanıcı'}</Text>
+        </View>
+      </LinearGradient>
 
       <ScrollView contentContainerStyle={styles.content}>
-        {/* Logo */}
-        <View style={styles.logoContainer}>
-          <View style={styles.logoCircle}>
-            <Ionicons name="medical-outline" size={50} color={COLORS.primary} />
+        {/* Form Card */}
+        <View style={styles.formCard}>
+          <View style={styles.inputWrap}>
+            <View style={styles.inputIcon}>
+              <Ionicons name="person-outline" size={20} color={COLORS.primary} />
+            </View>
+            <TextInput
+              style={styles.input}
+              placeholder="Adı Soyadı"
+              value={name}
+              onChangeText={setName}
+              placeholderTextColor={COLORS.textLight}
+            />
           </View>
-          <Text style={styles.logoText}>PREDIABET</Text>
+
+          <View style={styles.inputWrap}>
+            <View style={styles.inputIcon}>
+              <Ionicons name="call-outline" size={20} color={COLORS.primary} />
+            </View>
+            <TextInput
+              style={styles.input}
+              placeholder="Telefon"
+              value={phone}
+              onChangeText={setPhone}
+              keyboardType="phone-pad"
+              placeholderTextColor={COLORS.textLight}
+            />
+          </View>
+
+          <View style={styles.inputWrap}>
+            <View style={styles.inputIcon}>
+              <Ionicons name="lock-closed-outline" size={20} color={COLORS.primary} />
+            </View>
+            <TextInput
+              style={styles.input}
+              placeholder="Şifre"
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry
+              placeholderTextColor={COLORS.textLight}
+            />
+          </View>
         </View>
 
-        {/* Form */}
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.input}
-            placeholder="Adı Soyadı"
-            value={name}
-            onChangeText={setName}
-            placeholderTextColor={COLORS.textLight}
-          />
-        </View>
-
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.input}
-            placeholder="Telefon"
-            value={phone}
-            onChangeText={setPhone}
-            keyboardType="phone-pad"
-            placeholderTextColor={COLORS.textLight}
-          />
-        </View>
-
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.input}
-            placeholder="Şifre"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-            placeholderTextColor={COLORS.textLight}
-          />
-        </View>
-
-        {/* Save Button */}
-        <TouchableOpacity
-          style={styles.saveButton}
-          onPress={saveProfile}
-          disabled={saving}
-          activeOpacity={0.8}
-        >
-          {saving ? (
-            <ActivityIndicator color={COLORS.white} />
-          ) : (
-            <Text style={styles.saveButtonText}>Profili Güncelle</Text>
-          )}
+        <TouchableOpacity onPress={saveProfile} disabled={saving} activeOpacity={0.8}>
+          <LinearGradient colors={COLORS.gradient} style={styles.saveButton}>
+            {saving ? <ActivityIndicator color={COLORS.white} /> : <Text style={styles.saveButtonText}>Profili Güncelle</Text>}
+          </LinearGradient>
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
@@ -142,89 +132,77 @@ export default function ProfileScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: COLORS.background,
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
+  container: { flex: 1, backgroundColor: COLORS.background },
+  loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  headerGradient: {
+    paddingTop: 40,
+    paddingBottom: 30,
+    borderBottomLeftRadius: 30,
+    borderBottomRightRadius: 30,
     alignItems: 'center',
   },
-  header: {
-    backgroundColor: COLORS.primary,
+  headerRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    width: '100%',
     paddingHorizontal: 15,
-    paddingVertical: 15,
-    paddingTop: 40,
+    marginBottom: 20,
   },
-  headerBtn: {
-    padding: 5,
-  },
-  headerTitle: {
-    color: COLORS.white,
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  content: {
-    padding: 20,
-    alignItems: 'center',
-  },
-  logoContainer: {
-    alignItems: 'center',
-    marginBottom: 30,
-    marginTop: 10,
-  },
-  logoCircle: {
+  headerBtn: { padding: 5 },
+  headerTitle: { color: COLORS.white, fontSize: 18, fontWeight: 'bold' },
+  avatarWrap: { alignItems: 'center' },
+  avatarOuter: {
     width: 100,
     height: 100,
     borderRadius: 50,
+    backgroundColor: 'rgba(255,255,255,0.15)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: 'rgba(255,255,255,0.3)',
+  },
+  avatarInner: {
+    width: 76,
+    height: 76,
+    borderRadius: 38,
     backgroundColor: COLORS.white,
     justifyContent: 'center',
     alignItems: 'center',
-    elevation: 3,
-    shadowColor: COLORS.shadow,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    borderWidth: 1,
-    borderColor: COLORS.border,
+    elevation: 4,
   },
-  logoText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: COLORS.primary,
-    marginTop: 10,
-    letterSpacing: 2,
-  },
-  inputContainer: {
-    width: '100%',
-    marginBottom: 15,
-  },
-  input: {
+  avatarName: { color: COLORS.white, fontSize: 18, fontWeight: '600', marginTop: 10 },
+  content: { padding: 20, marginTop: -10 },
+  formCard: {
     backgroundColor: COLORS.white,
-    borderRadius: 10,
-    padding: 15,
-    fontSize: 16,
-    borderWidth: 1,
-    borderColor: COLORS.border,
-    color: COLORS.text,
+    borderRadius: 20,
+    padding: 20,
+    elevation: 5,
+    shadowColor: COLORS.shadow,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    marginBottom: 20,
   },
-  saveButton: {
-    backgroundColor: COLORS.primary,
-    borderRadius: 25,
-    paddingVertical: 15,
-    paddingHorizontal: 40,
-    width: '100%',
+  inputWrap: {
+    flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 20,
-    elevation: 3,
+    backgroundColor: COLORS.background,
+    borderRadius: 14,
+    marginBottom: 14,
+    paddingHorizontal: 14,
   },
-  saveButtonText: {
-    color: COLORS.white,
-    fontSize: 16,
-    fontWeight: 'bold',
+  inputIcon: { marginRight: 10 },
+  input: { flex: 1, paddingVertical: 15, fontSize: 16, color: COLORS.text },
+  saveButton: {
+    borderRadius: 25,
+    paddingVertical: 16,
+    alignItems: 'center',
+    elevation: 4,
+    shadowColor: COLORS.primary,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
   },
+  saveButtonText: { color: COLORS.white, fontSize: 16, fontWeight: 'bold', letterSpacing: 0.5 },
 });
