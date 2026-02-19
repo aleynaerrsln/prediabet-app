@@ -26,6 +26,18 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "d4cae09a-a310-48e0-b105-2bb09c326c84"
+      }
+    },
+    "owner": "aleyna5519",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/d4cae09a-a310-48e0-b105-2bb09c326c84"
     }
   }
 }
