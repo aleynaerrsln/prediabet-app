@@ -13,6 +13,7 @@ import FaqScreen from './src/screens/FaqScreen';
 import ContactScreen from './src/screens/ContactScreen';
 import AboutScreen from './src/screens/AboutScreen';
 import StepCounterScreen from './src/screens/StepCounterScreen';
+import AiAssistantScreen from './src/screens/AiAssistantScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -42,6 +43,7 @@ export default function App() {
         <Stack.Screen name="Contact" component={ContactScreen} />
         <Stack.Screen name="About" component={AboutScreen} />
         <Stack.Screen name="StepCounter" component={StepCounterScreen} />
+        <Stack.Screen name="AiAssistant" component={AiAssistantScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

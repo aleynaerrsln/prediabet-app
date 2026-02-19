@@ -28,6 +28,7 @@ const menuItems = [
   { title: 'S.S.S.', icon: 'help-circle', screen: 'Faq', colors: ['#E53935', '#EF9A9A'] },
   { title: 'Besin Ekle', icon: 'nutrition', screen: 'Food', colors: ['#7CB342', '#C5E1A5'] },
   { title: 'Adımsayar', icon: 'footsteps', screen: 'StepCounter', colors: ['#F4511E', '#FFAB91'] },
+  { title: 'AI Asistan', icon: 'sparkles', screen: 'AiAssistant', colors: ['#6A1B9A', '#BA68C8'] },
 ];
 
 const healthTips = [
